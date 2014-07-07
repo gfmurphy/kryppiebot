@@ -14,4 +14,11 @@ describe("handleMessage", function() {
       expect(resp).toEqual("Jake, you slipping?");
     })
   })
+
+  it("responds to messages with 'shouting' from Malf", function() {
+    var message = { name: "Malf", text: "larry...GET IT TOGETHER" }
+    messageHandler.handleMessage(message, function(resp) {
+      expect(resp).toEqual("RAAAAGGGGEEE!");
+    })
+  })
 })

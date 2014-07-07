@@ -7,4 +7,7 @@ exports.handleMessage = function(message, callback) {
           message.name != "Jake Maeroff") {
     callback("Jake, you slipping?");
   }
+  else if(message.text.match(/\s*[A-Z]{3,}\s+/) && message.name == "Malf") {
+    callback("RAAAAGGGGEEE!");
+  }
 }
