@@ -9,6 +9,6 @@ end
 
 post "/" do
   status 202
-  logger.debug(params.inspect)
+  logger.debug(request.inspect)
   "Message received."
 end
