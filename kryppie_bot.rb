@@ -1,5 +1,6 @@
-require "sinatra"
+require "json"
 require "logger"
+require "sinatra"
 
 enable :logging
 
@@ -13,6 +14,18 @@ end
 
 post "/" do
   status 202
-  logger.debug(request.inspect)
-  "Message received."
+  content_type :json
+
+  data = parse_request_body
+  logger.debug(data.inspect)
+
+  "Message received. id: %s" % data['id']
+end
+
+def parse_request_body
+  if env["rack.input"].size > 0
+    JSON.parse(env['rack.input'].gets)
+  else
+    {}
+  end
 end
