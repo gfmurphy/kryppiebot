@@ -15,6 +15,7 @@ class KryppieBotTest < Test::Unit::TestCase
 
   def test_get_root
     get "/"
+    assert_match(/text\/plain/, last_response.headers["Content-Type"])
     assert_equal "Up.", last_response.body
   end
 
@@ -23,14 +24,14 @@ class KryppieBotTest < Test::Unit::TestCase
     assert_equal 202, last_response.status
   end
 
-  def test_response_message
+  def test_response_content_type
     post "/"
-    assert_equal "Message received. id: ", last_response.body
+    assert_match(/text\/plain/, last_response.headers["Content-Type"])
   end
 
   def test_post_json
-    post "/", { id: "1234", name: "Foo Bar" }.to_json
-    assert_equal "Message received. id: 1234", last_response.body
+    post "/", "{ \"id\": \"1234\", \"name\": \"Foo Bar\" }"
+    assert_equal "Message received.", last_response.body
   end
 end
 

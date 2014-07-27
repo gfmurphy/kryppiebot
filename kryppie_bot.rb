@@ -1,31 +1,26 @@
-require "json"
-require "logger"
+require "redis"
 require "sinatra"
 
-enable :logging
-
-before do
-  logger.level = Logger.const_get ENV["LOG_LEVEL"] || "DEBUG"
+configure do
+  default_redis_url = "redis://localhost"
+  uri = URI(ENV["REDISTOGO_URL"] || default_redis_url)
+  REDIS = Redis.new(url: uri.to_s)
 end
 
 get "/" do
+  content_type :text
   "Up."
 end
 
 post "/" do
   status 202
-  content_type :json
-
-  data = parse_request_body
-  logger.debug(data.inspect)
-
-  "Message received. id: %s" % data['id']
+  content_type :text
+  publish_message
+  "Message received."
 end
 
-def parse_request_body
+def publish_message
   if env["rack.input"].size > 0
-    JSON.parse(env['rack.input'].gets)
-  else
-    {}
+    REDIS.publish "groupme:message", env["rack.input"].gets 
   end
 end
