@@ -2,6 +2,7 @@ require "redis"
 require "sinatra"
 
 configure do
+  set :public_folder, Proc.new { File.join(root, "public") }
   default_redis_url = "redis://localhost"
   uri = URI(ENV["REDISTOGO_URL"] || default_redis_url)
   REDIS = Redis.new(url: uri.to_s)
